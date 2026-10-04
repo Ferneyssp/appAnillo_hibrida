@@ -1,0 +1,2 @@
+{ "name": "Medidor de Anillo", "short_name": "Medidor", "lang": "es", "start_url": "./", "display": "standalone", "orientation": "portrait",
+  "background_color": "#F5F0E8", "theme_color": "#F5F0E8", "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" }] }
