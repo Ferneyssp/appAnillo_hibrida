@@ -3,8 +3,6 @@ export const t = {
   appName: 'Medidor de Anillo',
   back: 'Volver',
   help: 'Cómo funciona',
-  hideZones: 'Ocultar zonas',
-  zoneShort: { EASY: 'Fácil', NATURAL: 'Media', HARD: 'Difícil' },
 };
 
 export const METHOD_LABEL = {

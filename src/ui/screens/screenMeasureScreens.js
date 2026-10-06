@@ -13,7 +13,7 @@ function systemSelect(state, store, testId) {
     h('span', { class: 'sr-only' }, 'Sistema de tallas'),
     h(
       'select',
-      { 'data-testid': testId, 'data-thumb': 'Sistema', onChange: (e) => store.set({ system: e.target.value }) },
+      { 'data-testid': testId, onChange: (e) => store.set({ system: e.target.value }) },
       ALL_SYSTEMS.map((s) => h('option', { value: s, selected: s === state.system }, SYSTEM_LABEL[s])),
     ),
   );
@@ -48,7 +48,6 @@ export function sizerScreen({ state, store, nav }) {
     step: String(STEP_MM),
     value: String(diameter),
     'aria-label': 'Diámetro del círculo en milímetros',
-    'data-thumb': 'Deslizador',
     'data-testid': 'sizer-slider',
   });
 
@@ -73,7 +72,7 @@ export function sizerScreen({ state, store, nav }) {
 
   // Las flechas saltan al Ø de la talla anterior/siguiente de la tabla T1–T36.
   const nudge = (label, step, symbol) =>
-    h('button', { type: 'button', class: 'nudge', 'aria-label': label, 'data-thumb': label, onClick: () => setDiameter(neighbour(diameter, step).d) }, symbol);
+    h('button', { type: 'button', class: 'nudge', 'aria-label': label, onClick: () => setDiameter(neighbour(diameter, step).d) }, symbol);
 
   return {
     title: 'Medidor de anillo',
@@ -90,8 +89,6 @@ export function sizerScreen({ state, store, nav }) {
         eqLabel,
         linkButton('Calibrar de nuevo la pantalla', () => nav.push('calibration'))),
     ],
-    // Thumb Zone: las flechas ← → de la captura se movieron junto al deslizador, en la barra
-    // inferior (zona verde); el círculo queda arriba, donde se apoya el anillo.
     bottom: [
       h('div', { class: 'slider-row with-nudges' }, nudge('Talla anterior', -1, '←'), slider, nudge('Talla siguiente', 1, '→')),
       primaryButton('Medición completada', () => {
@@ -121,7 +118,6 @@ export function fingerScreen({ state, store, nav }) {
     value: String(width),
     'aria-label': 'Ancho del dedo en milímetros',
     'aria-orientation': 'vertical',
-    'data-thumb': 'Deslizador vertical',
     'data-testid': 'finger-slider',
   });
   const update = () => {
@@ -159,7 +155,6 @@ export function fingerScreen({ state, store, nav }) {
               type: 'button',
               class: 'swap',
               'aria-label': 'Cambiar el control de lado',
-              'data-thumb': 'Cambiar lado',
               onClick: () => store.set({ fingerControlSide: side === 'RIGHT' ? 'LEFT' : 'RIGHT' }),
             },
             '⇄',
@@ -211,7 +206,6 @@ export function calibrationScreen({ state, store, nav }) {
     step: '0.005',
     value: String(ppm),
     'aria-label': 'Escala de la pantalla',
-    'data-thumb': 'Deslizador',
     'data-testid': 'calibration-slider',
   });
   const update = () => {
@@ -247,9 +241,9 @@ export function calibrationScreen({ state, store, nav }) {
       h(
         'div',
         { class: 'slider-row with-nudges' },
-        h('button', { type: 'button', class: 'nudge small', 'aria-label': 'Más pequeño', 'data-thumb': 'Más pequeño', onClick: () => setPpm(ppm - 0.01) }, '−'),
+        h('button', { type: 'button', class: 'nudge small', 'aria-label': 'Más pequeño', onClick: () => setPpm(ppm - 0.01) }, '−'),
         slider,
-        h('button', { type: 'button', class: 'nudge small', 'aria-label': 'Más grande', 'data-thumb': 'Más grande', onClick: () => setPpm(ppm + 0.01) }, '+'),
+        h('button', { type: 'button', class: 'nudge small', 'aria-label': 'Más grande', onClick: () => setPpm(ppm + 0.01) }, '+'),
       ),
       primaryButton('Guardar calibración', () => {
         if (store.setCalibration(ppm)) {

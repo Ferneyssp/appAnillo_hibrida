@@ -1,5 +1,5 @@
-/* Estilo de las capturas de referencia (crema, tinta, dorado) con diseño "bottom-first" para
-   Thumb Zone. Totalmente adaptable: teléfono vertical/horizontal, tableta y escritorio.
+/* Estilo de las capturas de referencia (crema, tinta, dorado) con diseño "bottom-first".
+   Totalmente adaptable: teléfono vertical/horizontal, tableta y escritorio.
    Contraste WCAG AA. */
 :root {
   --bg: #f5f0e8;
@@ -14,9 +14,6 @@
   --warn: #92400e;
   --warn-bg: #fdf3e1;
   --error: #b3261e;
-  --zone-easy: #15803d;
-  --zone-natural: #eab308;
-  --zone-hard: #dc2626;
   --tap: 48px;
   --gutter: clamp(12px, 3vw, 32px);
   --content-max: 1100px;
@@ -168,26 +165,7 @@ hr { border: 0; border-top: 1px solid var(--line); width: 100%; margin: 6px 0; }
 .size-table th { text-align: left; border-bottom: 2px solid var(--ink); padding: 6px 4px; white-space: nowrap; }
 .size-table td { border-bottom: 1px solid var(--line); padding: 6px 4px; white-space: nowrap; }
 
-.phone-diagram { width: clamp(120px, 20vw, 180px); align-self: center; }
-.phone-diagram svg { width: 100%; height: auto; display: block; }
-.zone-easy { fill: var(--zone-easy); background: var(--zone-easy); }
-.zone-natural { fill: var(--zone-natural); background: var(--zone-natural); }
-.zone-hard { fill: var(--zone-hard); background: var(--zone-hard); }
-.legend { display: flex; align-items: center; gap: 12px; }
-.swatch { width: 20px; height: 20px; flex: none; }
 
-.thumb-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 40; }
-.thumb-canvas, .thumb-labels { position: absolute; inset: 0; }
-.thumb-target { position: absolute; border: 3px solid; border-radius: 6px; background: transparent !important; }
-.thumb-target.zone-easy { border-color: var(--zone-easy); }
-.thumb-target.zone-natural { border-color: var(--zone-natural); }
-.thumb-target.zone-hard { border-color: var(--zone-hard); }
-.thumb-target span { position: absolute; left: 4px; top: -18px; font-size: 11px; line-height: 16px; padding: 0 6px; white-space: nowrap; color: #fff; }
-.thumb-target.label-below span { top: auto; bottom: -18px; }
-.thumb-target.zone-easy span { background: var(--zone-easy); }
-.thumb-target.zone-natural span { background: var(--zone-natural); color: #000; }
-.thumb-target.zone-hard span { background: var(--zone-hard); }
-.thumb-hide { pointer-events: auto; position: absolute; top: 70px; left: 50%; transform: translateX(-50%); min-height: 40px; padding: 8px 16px; border: 1px solid var(--line); background: var(--surface); font-weight: 600; cursor: pointer; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); }
 
 /* ---------- Pantallas anchas (tabletas y escritorio) ---------- */
 @media (min-width: 700px) {
@@ -217,7 +195,6 @@ hr { border: 0; border-top: 1px solid var(--line); width: 100%; margin: 6px 0; }
   .tab.active::after { bottom: 4px; }
   .finger-area { height: calc(100dvh - 48px - 92px - 40px); }
   .calibration-area { height: calc(100dvh - 48px - 92px - 60px); }
-  .thumb-hide { top: 52px; }
 }
 
 /* ---------- Pantallas muy pequeñas ---------- */

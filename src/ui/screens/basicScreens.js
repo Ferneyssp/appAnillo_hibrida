@@ -1,6 +1,5 @@
-import { card, choiceRow, h, multiline, primaryButton, secondaryButton } from '../components.js';
+import { card, h, multiline, primaryButton, secondaryButton } from '../components.js';
 import { screenMethodSvg } from '../illustrations.js';
-import { classify, Hand, ThumbZone } from '../../domain/thumbZone.js';
 import { sizeChart } from '../../domain/sizing.js';
 import { oneDecimal, twoDecimals } from '../../domain/format.js';
 
@@ -22,7 +21,7 @@ export function homeScreen({ state, nav }) {
       ),
     ],
     bottom: [
-      h('div', { class: 'row-2' }, secondaryButton('Cómo funciona', () => nav.push('how')), secondaryButton('Ver Thumb Zone', () => nav.push('thumb'))),
+      secondaryButton('Cómo funciona', () => nav.push('how')),
       primaryButton('Medir anillo', () => nav.push('prepare')),
     ],
   };
@@ -82,51 +81,3 @@ export function howScreen({ nav }) {
   };
 }
 
-const ZONE_CLASS = { [ThumbZone.EASY]: 'zone-easy', [ThumbZone.NATURAL]: 'zone-natural', [ThumbZone.HARD]: 'zone-hard' };
-
-function phoneDiagram(hand) {
-  const cells = [];
-  for (let y = 0; y < 780; y += 15) {
-    for (let x = 0; x < 360; x += 15) {
-      cells.push(`<rect x="${x}" y="${y}" width="15" height="15" class="${ZONE_CLASS[classify(x + 7.5, y + 7.5, 360, 780, hand)]}"/>`);
-    }
-  }
-  return h('div', {
-    class: 'phone-diagram',
-    html: `<svg viewBox="0 0 360 780" role="img" aria-label="Mapa de zonas de alcance del pulgar"><g opacity="0.6">${cells.join('')}</g>
-      <rect x="2" y="2" width="356" height="776" rx="36" fill="none" stroke="currentColor" stroke-width="6"/></svg>`,
-  });
-}
-
-/** P11 – Thumb Zone (RF-11). */
-export function thumbScreen({ state, store }) {
-  const legend = (zone, text) => h('div', { class: 'legend' }, h('span', { class: `swatch ${ZONE_CLASS[zone]}` }), text);
-  return {
-    title: 'Thumb Zone',
-    back: true,
-    className: 'two-col',
-    content: [
-      h('div', { class: 'col' },
-        h('p', {}, 'Zona de la pantalla que alcanzas con el pulgar sosteniendo el teléfono con una mano. Las acciones principales (Medir, Comenzar medición, Medición completada, Volver a medir) están en la zona verde.'),
-        phoneDiagram(state.hand)),
-      h('div', { class: 'col' },
-        legend(ThumbZone.EASY, 'Verde: fácil alcance'),
-        legend(ThumbZone.NATURAL, 'Amarilla: alcance medio'),
-        legend(ThumbZone.HARD, 'Roja: difícil alcance'),
-        choiceRow({
-          label: 'Mano con la que sostienes el teléfono',
-          options: [Hand.RIGHT, Hand.LEFT],
-          selected: state.hand,
-          optionLabel: (x) => (x === Hand.RIGHT ? 'Derecha' : 'Izquierda'),
-          onSelect: (hand) => store.set({ hand }),
-          thumbLabel: 'Mano',
-          testId: 'hand',
-        })),
-    ],
-    bottom: [
-      primaryButton(state.thumbZoneVisible ? 'Ocultar zonas de la app' : 'Mostrar zonas sobre la app', () =>
-        store.set({ thumbZoneVisible: !state.thumbZoneVisible }),
-      ),
-    ],
-  };
-}

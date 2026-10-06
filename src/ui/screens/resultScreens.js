@@ -44,7 +44,7 @@ export function resultScreen({ state, store, nav }) {
           h('span', { class: 'eyebrow light' }, 'TALLA RECOMENDADA'),
           h('div', { class: 'result-size', 'data-testid': 'result-size' }, sizeNode(size.label, 'inline-size'), state.system === 'USA' ? ' USA' : ''),
           h('span', { 'data-testid': 'result-equivalence' }, `${eq.T} · ${eq.USA} USA · EU ${eq.EU}`)),
-        choiceRow({ label: 'Mostrar en', options: ALL_SYSTEMS, selected: state.system, optionLabel: (s) => SYSTEM_LABEL[s], onSelect: (system) => store.set({ system }), thumbLabel: 'Sistema', testId: 'result-system' }),
+        choiceRow({ label: 'Mostrar en', options: ALL_SYSTEMS, selected: state.system, optionLabel: (s) => SYSTEM_LABEL[s], onSelect: (system) => store.set({ system }), testId: 'result-system' }),
         precisionNote(r)),
       h('div', { class: 'col' },
         card({},
@@ -90,8 +90,8 @@ export function dialog({ state, store }) {
     h('label', { for: 'saved-name', class: 'field-label' }, 'Nombre'),
     input,
     d.error ? h('p', { class: 'field-error', role: 'alert' }, d.error) : null,
-    choiceRow({ label: 'Mano', options: [Hand.RIGHT, Hand.LEFT], selected: d.hand, optionLabel: (x) => HAND_LABEL[x], onSelect: (hand) => keepName({ hand }), thumbLabel: 'Mano', testId: 'dialog-hand' }),
-    choiceRow({ label: 'Dedo', options: Object.values(Finger), selected: d.finger, optionLabel: (x) => FINGER_LABEL[x], onSelect: (finger) => keepName({ finger }), thumbLabel: 'Dedo', testId: 'dialog-finger' }),
+    choiceRow({ label: 'Mano', options: [Hand.RIGHT, Hand.LEFT], selected: d.hand, optionLabel: (x) => HAND_LABEL[x], onSelect: (hand) => keepName({ hand }), testId: 'dialog-hand' }),
+    choiceRow({ label: 'Dedo', options: Object.values(Finger), selected: d.finger, optionLabel: (x) => FINGER_LABEL[x], onSelect: (finger) => keepName({ finger }), testId: 'dialog-finger' }),
   ], [secondaryButton('Cancelar', close), primaryButton('Guardar', submit)]);
 }
 
@@ -108,12 +108,11 @@ export function converterScreen({ state, store }) {
   const label = options.some((o) => o.label === c.label) ? c.label : options[13].label;
   const converted = convert(label, c.from, c.to);
   const select = (value, list, onChange, testId, aria) =>
-    h('select', { class: 'select', 'data-testid': testId, 'aria-label': aria, 'data-thumb': aria, onChange: (e) => onChange(e.target.value) },
+    h('select', { class: 'select', 'data-testid': testId, 'aria-label': aria, onChange: (e) => onChange(e.target.value) },
       list.map(([v, text]) => h('option', { value: v, selected: v === value }, text)));
   const systems = ALL_SYSTEMS.map((s) => [s, SYSTEM_LABEL[s]]);
   return {
     title: 'Convertidor',
-    // Thumb Zone: el resultado (solo lectura) arriba y los selectores abajo, cerca del pulgar.
     align: 'bottom',
     className: 'narrow',
     content: [
@@ -123,7 +122,7 @@ export function converterScreen({ state, store }) {
       h('div', { class: 'converter-size' }, select(label, options.map((o) => [o.label, o.label]), (v) => store.set({ converter: { ...c, label: v } }), 'converter-size', 'Talla de origen')),
       h('div', { class: 'converter-systems' },
         select(c.from, systems, (v) => store.set({ converter: { ...c, from: v, label: convert(label, c.from, v)?.label ?? label } }), 'converter-from', 'Sistema de origen'),
-        h('button', { type: 'button', class: 'icon-btn swap-systems', 'aria-label': 'Intercambiar sistemas', 'data-thumb': 'Intercambiar', onClick: () => store.set({ converter: { from: c.to, to: c.from, label: converted.label } }) }, '⇄'),
+        h('button', { type: 'button', class: 'icon-btn swap-systems', 'aria-label': 'Intercambiar sistemas', onClick: () => store.set({ converter: { from: c.to, to: c.from, label: converted.label } }) }, '⇄'),
         select(c.to, systems, (v) => store.set({ converter: { ...c, to: v } }), 'converter-to', 'Sistema de destino'),
       ),
     ],
@@ -141,7 +140,7 @@ export function savedScreen({ state, store }) {
       h('button', { type: 'button', role: 'menuitem', onClick: () => share(store, s) }, 'Compartir'),
       h('button', { type: 'button', role: 'menuitem', onClick: () => store.set({ dialog: { mode: 'edit', id: s.id, name: s.name, hand: s.hand, finger: s.finger, error: null } }) }, 'Editar'),
       h('button', { type: 'button', role: 'menuitem', onClick: () => store.set({ dialog: { mode: 'delete', id: s.id } }) }, 'Eliminar'));
-    const toggle = h('button', { type: 'button', class: 'icon-btn kebab', 'aria-label': `Opciones de ${s.name}`, 'aria-haspopup': 'menu', 'data-thumb': 'Opciones', onClick: () => { menu.hidden = !menu.hidden; } }, '⋮');
+    const toggle = h('button', { type: 'button', class: 'icon-btn kebab', 'aria-label': `Opciones de ${s.name}`, 'aria-haspopup': 'menu', onClick: () => { menu.hidden = !menu.hidden; } }, '⋮');
     return h('article', { class: 'saved-card', 'data-testid': 'saved-card' },
       h('div', { class: 'saved-head' }, h('span', {}, s.name), toggle),
       sizeNode(eq.T),

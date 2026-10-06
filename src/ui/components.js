@@ -23,18 +23,18 @@ export function h(tag, attrs = {}, ...children) {
   return el;
 }
 
-/** Acción principal: ancho completo en la barra inferior (zona verde). */
+/** Acción principal: ancho completo en la barra inferior. */
 export const primaryButton = (text, onClick, attrs = {}) =>
-  h('button', { type: 'button', class: 'btn btn-primary', 'data-thumb': text, onClick, ...attrs }, text);
+  h('button', { type: 'button', class: 'btn btn-primary', onClick, ...attrs }, text);
 
 export const secondaryButton = (text, onClick, attrs = {}) =>
-  h('button', { type: 'button', class: 'btn btn-secondary', 'data-thumb': text, onClick, ...attrs }, text);
+  h('button', { type: 'button', class: 'btn btn-secondary', onClick, ...attrs }, text);
 
 export const linkButton = (text, onClick) =>
-  h('button', { type: 'button', class: 'btn btn-link', 'data-thumb': text, onClick }, text);
+  h('button', { type: 'button', class: 'btn btn-link', onClick }, text);
 
 /** Grupo de opciones tipo "segmented button" accesible como radiogroup. */
-export function choiceRow({ label, options, selected, optionLabel, onSelect, thumbLabel, testId }) {
+export function choiceRow({ label, options, selected, optionLabel, onSelect, testId }) {
   const labelId = `lbl-${Math.random().toString(36).slice(2, 8)}`;
   return h(
     'div',
@@ -42,7 +42,7 @@ export function choiceRow({ label, options, selected, optionLabel, onSelect, thu
     h('span', { class: 'choice-label', id: labelId }, label),
     h(
       'div',
-      { class: 'choice-row', role: 'radiogroup', 'aria-labelledby': labelId, 'data-thumb': thumbLabel, 'data-testid': testId },
+      { class: 'choice-row', role: 'radiogroup', 'aria-labelledby': labelId, 'data-testid': testId },
       options.map((option) =>
         h(
           'button',

@@ -21,9 +21,9 @@ Funciona de 320 px a 2560 px de ancho, en vertical y horizontal: una columna en 
 
 ## Pruebas
 ```bash
-npm test                           # 20 pruebas unitarias (Vitest): tabla y tallas, calibración, guardadas, Thumb Zone
+npm test                           # 14 pruebas unitarias (Vitest): tabla y tallas, calibración, guardadas
 npx playwright install chromium    # primera vez
-npm run test:e2e                   # 34 pruebas E2E: funcionales, Thumb Zone y adaptabilidad (8 tamaños)
+npm run test:e2e                   # Pruebas E2E: funcionales y adaptabilidad (8 tamaños)
 ```
 `PW_CHROMIUM=/ruta/a/chrome npm run test:e2e` usa un Chromium ya instalado. `node scripts/capturas.mjs` (con `npm run preview` activo) regenera las capturas de la documentación.
 
@@ -37,11 +37,11 @@ npx cap open android               # Android Studio › Build › Build APK(s)
 
 ## Estructura
 ```text
-src/domain/          sizeTable, sizing, calibration, savedSizes, format, thumbZone
+src/domain/          sizeTable, sizing, calibration, savedSizes, format
 src/state/store.js   estado (equivalente al ViewModel)
-src/ui/              router, components, messages, illustrations, share, thumbOverlay, screens/
+src/ui/              router, components, messages, illustrations, share, screens/
 src/styles/main.css  estilos adaptables
-tests/               unit/ (Vitest), e2e/ (Playwright: funcional, thumbzone, adaptable)
+tests/               unit/ (Vitest), e2e/ (Playwright: funcional, adaptable)
 scripts/             capturas.mjs, equivalencia.mjs
 android/             proyecto Android generado por Capacitor
 ```

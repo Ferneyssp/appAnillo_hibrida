@@ -1,4 +1,3 @@
-import { expect } from '@playwright/test';
 
 /** Simula una calibración ya hecha (px por mm de la pantalla). */
 export async function calibrate(page, pxPerMm = 6) {
@@ -13,16 +12,6 @@ export const setRange = (locator, value) =>
     el.dispatchEvent(new Event('input', { bubbles: true }));
   }, value);
 
-export async function enableOverlay(page) {
-  await page.evaluate(() => window.__ringSizer.store.set({ thumbZoneVisible: true }));
-  await expect(page.getByTestId('thumb-overlay')).toBeVisible();
-}
-
-export async function zoneOf(page, label) {
-  const target = page.locator('.thumb-target', { hasText: `${label} · ` }).first();
-  await expect(target).toBeVisible();
-  return target.getAttribute('data-zone');
-}
 
 /** Ancho de página mayor que la ventana ⇒ desplazamiento horizontal (no permitido). */
 export const hasHorizontalOverflow = (page) =>

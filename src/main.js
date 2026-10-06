@@ -3,7 +3,7 @@ import { App } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
 import { createStore } from './state/store.js';
 import { createRouter } from './ui/router.js';
-import { homeScreen, howScreen, prepareScreen, thumbScreen } from './ui/screens/basicScreens.js';
+import { homeScreen, howScreen, prepareScreen } from './ui/screens/basicScreens.js';
 import { calibrationScreen, fingerScreen, sizerScreen } from './ui/screens/screenMeasureScreens.js';
 import { converterScreen, dialog, resultScreen, savedScreen } from './ui/screens/resultScreens.js';
 
@@ -21,7 +21,6 @@ const router = createRouter({
     saved: savedScreen,
     calibration: calibrationScreen,
     how: howScreen,
-    thumb: thumbScreen,
     dialog,
   },
 });

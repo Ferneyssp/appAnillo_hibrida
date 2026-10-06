@@ -15,7 +15,7 @@ const screens = [
   { name: 'escritorio', viewport: { width: 1440, height: 900 } },
   { name: 'escritorio grande', viewport: { width: 2560, height: 1440 } },
 ];
-const ROUTES = ['home', 'prepare', 'calibration', 'sizer', 'finger', 'result', 'converter', 'saved', 'how', 'thumb'];
+const ROUTES = ['home', 'prepare', 'calibration', 'sizer', 'finger', 'result', 'converter', 'saved', 'how'];
 
 for (const { name, viewport } of screens) {
   test.describe(`PR ${name} ${viewport.width}×${viewport.height}`, () => {

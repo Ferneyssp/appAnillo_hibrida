@@ -4,7 +4,7 @@ import { calibrate, setRange } from './helpers.js';
 test('PF-01 inicio: nombre, descripción, botones y pestañas', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('heading', { name: /Encuentra tu talla de anillo/ })).toBeVisible();
-  for (const name of ['Medir anillo', 'Cómo funciona', 'Ver Thumb Zone']) await expect(page.getByRole('button', { name, exact: true })).toBeVisible();
+  for (const name of ['Medir anillo', 'Cómo funciona']) await expect(page.getByRole('button', { name, exact: true })).toBeVisible();
   for (const tab of ['Anillo', 'Dedo', 'Convertidor', 'Guardadas']) await expect(page.getByRole('button', { name: tab, exact: true })).toBeVisible();
   await expect(page.getByTestId('calibration-status')).toHaveText('Pantalla sin calibrar');
 });
@@ -151,17 +151,6 @@ test('PF-11 «Cómo funciona»: tarjeta de referencia, fórmulas y tabla T1–T3
   await expect(rows.nth(13)).toHaveText('T 1417,254,0754');
 });
 
-test('PF-12 Ver Thumb Zone: superposición sobre la interfaz real y ocultar', async ({ page }) => {
-  await page.goto('/');
-  await page.getByRole('button', { name: 'Ver Thumb Zone' }).click();
-  await page.getByRole('button', { name: 'Mostrar zonas sobre la app' }).click();
-  await expect(page.getByTestId('thumb-overlay')).toBeVisible();
-  await page.getByRole('button', { name: 'Volver' }).click();
-  await page.getByRole('button', { name: 'Medir anillo' }).click();
-  await expect(page.locator('.thumb-target').first()).toBeVisible();
-  await page.getByRole('button', { name: 'Ocultar zonas' }).click();
-  await expect(page.getByTestId('thumb-overlay')).toHaveCount(0);
-});
 
 test('PF-13 navegación atrás y sin errores técnicos', async ({ page }) => {
   const errors = [];

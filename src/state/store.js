@@ -1,5 +1,4 @@
 import { SizingSystem } from '../domain/sizing.js';
-import { Hand as ThumbHand } from '../domain/thumbZone.js';
 import { createSavedSizesRepository } from '../domain/savedSizes.js';
 import { isValidCalibration } from '../domain/calibration.js';
 
@@ -34,8 +33,6 @@ export function createStore(storage = safeStorage()) {
     saved: repository.list(),
     dialog: null,
     toast: null,
-    thumbZoneVisible: false,
-    hand: ThumbHand.RIGHT,
     converter: { label: 'T 14', from: SizingSystem.T, to: SizingSystem.USA },
   };
   const listeners = new Set();

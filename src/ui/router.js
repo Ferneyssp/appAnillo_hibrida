@@ -1,5 +1,4 @@
 import { h } from './components.js';
-import { mountThumbOverlay } from './thumbOverlay.js';
 import { t } from './messages.js';
 
 /** Pestañas inferiores (como la barra de navegación de las imágenes de referencia). */
@@ -9,7 +8,7 @@ export const TABS = [
   { route: 'converter', label: 'Convertidor' },
   { route: 'saved', label: 'Guardadas' },
 ];
-const DEEP_LINKS = ['how', 'thumb', 'calibration', 'converter', 'saved', 'finger'];
+const DEEP_LINKS = ['how', 'calibration', 'converter', 'saved', 'finger'];
 
 /**
  * Enrutador con pila sincronizada con el historial (botón Atrás de Android/navegador).
@@ -21,7 +20,6 @@ export function createRouter({ root, store, screens, startRoute = 'home' }) {
   let stack = [];
   let pendingRoute = null;
   let cleanup = null;
-  let unmountOverlay = null;
   let currentScreen = null;
 
   const current = () => stack[stack.length - 1];
@@ -81,11 +79,11 @@ export function createRouter({ root, store, screens, startRoute = 'home' }) {
       'header',
       { class: 'top-bar' },
       screen.back
-        ? h('button', { type: 'button', class: 'icon-btn', 'aria-label': t.back, 'data-thumb': 'Volver', onClick: nav.back }, '‹')
+        ? h('button', { type: 'button', class: 'icon-btn', 'aria-label': t.back, onClick: nav.back }, '‹')
         : h('span', { class: 'icon-spacer' }),
       h('h1', { class: 'top-title', tabindex: '-1' }, screen.title),
       screen.help
-        ? h('button', { type: 'button', class: 'icon-btn help', 'aria-label': t.help, 'data-thumb': 'Ayuda', onClick: () => nav.push('how') }, '?')
+        ? h('button', { type: 'button', class: 'icon-btn help', 'aria-label': t.help, onClick: () => nav.push('how') }, '?')
         : h('span', { class: 'icon-spacer' }),
     );
   }
@@ -101,7 +99,6 @@ export function createRouter({ root, store, screens, startRoute = 'home' }) {
             type: 'button',
             class: `tab${current() === tab.route ? ' active' : ''}`,
             'aria-current': current() === tab.route ? 'page' : null,
-            'data-thumb': `Pestaña ${tab.label}`,
             onClick: () => nav.reset(tab.route),
           },
           tab.label,
@@ -124,8 +121,6 @@ export function createRouter({ root, store, screens, startRoute = 'home' }) {
     const state = store.getState();
     cleanup?.();
     cleanup = null;
-    unmountOverlay?.();
-    unmountOverlay = null;
     const oldScroll = root.querySelector('.content')?.scrollTop ?? 0;
     const screen = (screens[current()] ?? screens[startRoute])({ state, store, nav });
     currentScreen = screen;
@@ -151,27 +146,18 @@ export function createRouter({ root, store, screens, startRoute = 'home' }) {
       content.scrollTop = oldScroll;
     }
     cleanup = screen.onMount?.(root) ?? null;
-    if (state.thumbZoneVisible) {
-      unmountOverlay = mountThumbOverlay(root, { hand: state.hand, onHide: () => store.set({ thumbZoneVisible: false }) });
-    }
   }
 
-  /** Vuelve a montar solo las capas superpuestas (Thumb Zone, diálogo, aviso). */
+  /** Vuelve a montar solo las capas superpuestas (diálogo, aviso). */
   function refreshLayers(state) {
-    unmountOverlay?.();
-    unmountOverlay = null;
     root.querySelectorAll('.sheet-backdrop, .toast').forEach((n) => n.remove());
     root.append(...overlays(state));
-    if (state.thumbZoneVisible) {
-      unmountOverlay = mountThumbOverlay(root, { hand: state.hand, onHide: () => store.set({ thumbZoneVisible: false }) });
-    }
   }
 
   function onStateChange(state, changes) {
     if (pendingRoute) return;
     const keys = Object.keys(changes);
-    // Las pantallas interactivas (medidores) solo se redibujan si cambia algo de lo que
-    // dependen; así activar la Thumb Zone no interrumpe el deslizador.
+    // Las pantallas interactivas (medidores) solo se redibujan si cambia algo de lo que dependen.
     if (currentScreen?.interactive && !keys.some((k) => currentScreen.dependsOn?.includes(k))) {
       refreshLayers(state);
       return;
